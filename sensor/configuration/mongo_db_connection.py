@@ -1,6 +1,11 @@
-import pymongo
-from sensor.constant.database import DATABASE_NAME
+import os
+import sys
 import certifi
+import pymongo
+
+from sensor.constant.database import DATABASE_NAME
+from sensor.constant.env_variable import MONGODB_URL_KEY
+
 ca = certifi.where()
 
 class MongoDBClient:
@@ -9,9 +14,17 @@ class MongoDBClient:
         try:
             if MongoDBClient.client is None:
                 mongo_db_url  = "mongodb+srv://maheshmkvb:mahkum@cluster0.kllub8y.mongodb.net/?retryWrites=true&w=majority"
+                
+                if mongo_db_url is None:
+                    raise Exception(f"Environment key: {MONGODB_URL_KEY} is not set.")
+
                 MongoDBClient.client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+
             self.client = MongoDBClient.client
+
             self.database = self.client[database_name]
+
             self.database_name = database_name
+
         except Exception as e:
             raise e
