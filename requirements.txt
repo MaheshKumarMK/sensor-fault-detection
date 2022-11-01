@@ -1,4 +1,7 @@
 pymongo[srv]==4.2.0
 certifi
 from-root==1.0.2
+pandas
+numpy
+scikit-learn
 -e .
