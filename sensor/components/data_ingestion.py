@@ -8,7 +8,10 @@ from pandas import DataFrame
 from sensor.data_access.sensor_data import SensorData
 from sensor.entity.config_entity import DataIngestionConfig
 from sensor.exception import SensorException
+from sensor.logger import logging
 from sensor.entity.artifact_entity import DataIngestionArtifact
+from sensor.utils.main_utils import read_yaml_file
+from sensor.constant.training_pipeline import SCHEMA_DROP_COLS, SCHEMA_FILE_PATH
 
 
 class DataIngestion:
@@ -111,6 +114,10 @@ class DataIngestion:
 
         try:
             dataframe = self.export_data_into_feature_store()
+
+            _schema_config = read_yaml_file(file_path=SCHEMA_FILE_PATH)
+
+            dataframe = dataframe.drop(_schema_config[SCHEMA_DROP_COLS], axis=1)
 
             logging.info("Got the data from mongodb")
 
