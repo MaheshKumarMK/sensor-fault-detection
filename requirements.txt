@@ -4,4 +4,6 @@ from-root==1.0.2
 pandas
 numpy
 scikit-learn
+pyYAML
+evidently==0.1.58.dev0
 -e .
