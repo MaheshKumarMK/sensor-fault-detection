@@ -14,6 +14,9 @@ from sensor.entity.config_entity import DataValidationConfig
 from sensor.components.data_transformation import DataTransformation
 from sensor.entity.config_entity import DataTransformationConfig
 from sensor.entity.artifact_entity import DataTransformationArtifact
+from sensor.components.model_trainer import ModelTrainer
+from sensor.entity.artifact_entity import ModelTrainerArtifact
+from sensor.entity.config_entity import ModelTrainingConfig
 
 
 class TrainPipline:
@@ -23,6 +26,8 @@ class TrainPipline:
         self.data_validation_config = DataValidationConfig()
 
         self.data_transformation_config = DataTransformationConfig()
+
+        self.model_trainer_config = ModelTrainingConfig()
         
 
     def start_data_ingestion(self)->DataIngestionArtifact: #this function should return train and test file path as mentioned in artifact
@@ -93,9 +98,23 @@ class TrainPipline:
         except Exception as e:
             raise SensorException(e, sys)
 
+    def start_model_trainer(
+            self, data_transformation_artifact: DataTransformationArtifact
+        ) -> ModelTrainerArtifact:
+            try:
+                model_trainer = ModelTrainer(
+                    data_transformation_artifact=data_transformation_artifact,
+                    model_trainer_config = self.model_trainer_config ,
+                )
+
+                model_trainer_artifact = model_trainer.initiate_model_trainer()
+
+                return model_trainer_artifact
+
+            except Exception as e:
+                raise SensorException(e, sys)
         
     
-
     def run_pipeline(self):
         try:
             data_ingestion_artifact = self.start_data_ingestion()
@@ -106,6 +125,10 @@ class TrainPipline:
 
             data_transformation_artifact = self.start_data_transformation(
                 data_validation_artifact
+            )
+
+            model_training_artifact = self.start_model_trainer(
+                data_transformation_artifact
             )
         except Exception as e:
             raise SensorException(e, sys)

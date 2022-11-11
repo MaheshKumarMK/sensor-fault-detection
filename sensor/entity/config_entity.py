@@ -92,6 +92,38 @@ class DataTransformationConfig:
     )
 
     
+@dataclass
+class ModelTrainingConfig:
+    model_trainer_dir: str = os.path.join(
+        training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME
+    )
+
+    trained_model_file_path:str = os.path.join(
+        model_trainer_dir, MODEL_TRAINER_TRAINED_MODEL_NAME, MODEL_FILE_NAME
+    )
+
+    expected_accuracy: float = MODEL_TRAINER_EXPECTED_SCORE
+
+    #model_config_file_path = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
+
+    overfitting_underfitting_threshold = MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD
+
+
+@dataclass
+class ModelEvaluationConfig:
+    model_evaluation_dir: str = os.path.join(
+        training_pipeline_config.artifact_dir, MODEL_EVALUATION_DIR_NAME
+    )
+
+    report_file_path = os.path.join(
+        model_evaluation_dir, MODEL_EVALUATION_REPORT_NAME
+    )
+
+    change_threshold_score = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+    
+
+
+
 
 
 
