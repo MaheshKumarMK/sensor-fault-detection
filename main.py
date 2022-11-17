@@ -67,18 +67,8 @@ async def train_route():
 #     except Exception as e:
 #         raise Response(f"Error Occured! {e}")
 
-def main():
-    try:
-        training_pipeline = TrainPipeline()
-        training_pipeline.run_pipeline()
-    except Exception as e:
-        print(e)
-        logging.exception(e)
-
 
 if __name__=="__main__":
-    #main()
-    # set_env_variable(env_file_path)
     app_run(app, host=APP_HOST, port=APP_PORT)
 
 # if __name__ == '__main__':
