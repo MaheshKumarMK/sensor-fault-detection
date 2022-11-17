@@ -1,4 +1,3 @@
-![alt text](https://ineuron.ai/images/ineuron-logo.png)
 # Sensor-Fault-Detection
 
 ### Problem Statement
@@ -28,7 +27,6 @@ The problem is to reduce the cost due to unnecessary repairs. So it is required 
 2. AWS EC2
 3. AWS ECR
 4. Git Actions
-5. Terraform
 
 ## How to run?
 
@@ -77,14 +75,14 @@ export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
 
 export AWS_DEFAULT_REGION=<AWS_DEFAULT_REGION>
 
-export MONGODB_URL="mongodb+srv://<username>:<password>@ineuron-ai-projects.7eh1w4s.mongodb.net/?retryWrites=true&w=majority"
+export MONGODB_URL>
 
 ```
 
 ### Step 5 - Run the application server
 
 ```bash
-python app.py
+python main.py
 ```
 
 ### Step 6. Train application
