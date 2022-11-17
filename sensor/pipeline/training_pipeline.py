@@ -195,4 +195,5 @@ class TrainPipeline:
             TrainPipeline.is_pipeline_running=False
             
         except Exception as e:
+            TrainPipeline.is_pipeline_running=False
             raise SensorException(e, sys)
