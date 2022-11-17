@@ -120,6 +120,24 @@ class ModelEvaluationConfig:
     )
 
     change_threshold_score = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+
+@dataclass
+class ModelPusherConfig:
+    model_pusher_dir: str = os.path.join(
+        training_pipeline_config.artifact_dir, MODEL_PUSHER_DIR_NAME
+    )
+
+    model_file_path: str = os.path.join(
+        model_pusher_dir, MODEL_FILE_NAME
+    )
+
+    timestamp = round(datetime.now().timestamp())
+
+    saved_model_path = os.path.join(
+        SAVED_MODEL_DIR, f"{timestamp}",
+        MODEL_FILE_NAME
+    )
+
     
 
 

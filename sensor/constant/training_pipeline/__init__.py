@@ -88,5 +88,12 @@ MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE:float = 0.02
 
 MODEL_EVALUATION_REPORT_NAME = "report.yaml"
 
+SAVED_MODEL_DIR =os.path.join("saved_models")
 
+
+"""
+MODEL Pusher related constant start with MODEL_PUSHER var name
+"""
+MODEL_PUSHER_DIR_NAME = "model_pusher"
+MODEL_PUSHER_SAVED_MODEL_DIR = SAVED_MODEL_DIR
 

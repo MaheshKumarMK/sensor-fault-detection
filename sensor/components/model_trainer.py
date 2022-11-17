@@ -4,6 +4,7 @@ from sensor.logger import logging
 import sys
 
 from xgboost import XGBClassifier
+from sklearn.pipeline import Pipeline
 
 from sensor.entity.config_entity import ModelTrainingConfig
 from sensor.entity.artifact_entity import ModelTrainerArtifact, DataTransformationArtifact
