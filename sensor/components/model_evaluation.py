@@ -73,7 +73,7 @@ class ModelEvaluation:
 
                     trained_model_path=train_model_file_path, 
 
-                    train_model_metric_artifact=self.model_training_artifact.test_metric_artifact,
+                    train_model_metric_artifact=self.model_training_artifact.train_metric_artifact,
 
                     best_model_metric_artifact=None
                 )

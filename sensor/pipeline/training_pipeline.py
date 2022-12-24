@@ -4,7 +4,7 @@ from sensor.components.data_ingestion import DataIngestion
 from sensor.exception import SensorException
 from sensor.logger import logging
 
-# from sensor.components.data_ingestion import Da
+from sensor.entity.config_entity import TrainingPipelineConfig
 from sensor.entity.config_entity import DataIngestionConfig
 from sensor.entity.artifact_entity import DataIngestionArtifact
 from sensor.components.data_ingestion import DataIngestion
@@ -23,11 +23,16 @@ from sensor.entity.config_entity import ModelEvaluationConfig
 from sensor.components.model_pusher import ModelPusher
 from sensor.entity.artifact_entity import ModelPusherArtifact
 from sensor.entity.config_entity import ModelPusherConfig
-
+from sensor.cloud_storage.s3_syncher import S3Sync
+from sensor.constant.s3_bucket import *
+from sensor.constant.training_pipeline import *
 
 class TrainPipeline:
     is_pipeline_running=False
+
     def __init__(self):
+        self.training_pipeline_config = TrainingPipelineConfig()
+
         self.data_ingestion_config=DataIngestionConfig()
 
         self.data_validation_config = DataValidationConfig()
@@ -39,6 +44,8 @@ class TrainPipeline:
         self.model_eval_config = ModelEvaluationConfig()
 
         self.model_pusher_config = ModelPusherConfig()
+
+        self.s3_sync = S3Sync()
         
 
     def start_data_ingestion(self)->DataIngestionArtifact: #this function should return train and test file path as mentioned in artifact
@@ -161,6 +168,32 @@ class TrainPipeline:
             raise  SensorException(e,sys)
 
 
+    def sync_artifact_dir_to_s3(self):
+        try:
+            aws_buket_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
+
+            self.s3_sync.sync_folder_to_s3(
+                folder = self.training_pipeline_config.artifact_dir,
+                aws_bucket_url=aws_buket_url
+                )
+
+        except Exception as e:
+            raise SensorException(e,sys)
+
+            
+    def sync_saved_model_dir_to_s3(self):
+        try:
+            aws_buket_url = f"s3://{TRAINING_BUCKET_NAME}/{SAVED_MODEL_DIR}"
+
+            self.s3_sync.sync_folder_to_s3(
+                folder = SAVED_MODEL_DIR,
+                aws_bucket_url=aws_buket_url
+                )
+
+        except Exception as e:
+            raise SensorException(e,sys)
+
+
     def run_pipeline(self):
 
         TrainPipeline.is_pipeline_running=True
@@ -193,7 +226,12 @@ class TrainPipeline:
             )
 
             TrainPipeline.is_pipeline_running=False
+
+            self.sync_artifact_dir_to_s3()
+
+            self.sync_saved_model_dir_to_s3()
             
         except Exception as e:
+            self.sync_artifact_dir_to_s3()
             TrainPipeline.is_pipeline_running=False
             raise SensorException(e, sys)
